@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     "api",
-    "channels",
+
 ]
 
 MIDDLEWARE = [
@@ -70,16 +71,21 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'chat.wsgi.application'
+
+ASGI_APPLICATION = "chat.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default":{
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+# Измените DATABASES на ваш выбор, например, SQLite для простоты
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 
