@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+
+class Mesage(models.Model):
+    author = models.CharField(max_length=255)
+    content = models.TextField(max_length=255)
+    date = models.DateField(auto_now_add=True)
