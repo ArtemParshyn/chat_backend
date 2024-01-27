@@ -31,19 +31,24 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "rest_framework",
+    'rest_framework.authtoken',
     'channels',
     'daphne',
+    'djoser',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rest_framework",
-    'rest_framework.authtoken',
-    'djoser',
-    "api"
+
+    "api",
+    'users'
 ]
+
+
 
 ASGI_APPLICATION = 'chat.asgi.application'
 CHANNEL_LAYERS = {
@@ -93,6 +98,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

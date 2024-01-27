@@ -17,13 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 
-from api.views import MessageViewSet
+from api.views import MessageViewSet, AuthorApiView
+from rest_framework import routers
+
+router = routers.SimpleRouter(MessageViewSet)
+router.register(r'message', MessageViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('api.urls')),
-    path('api/message/', MessageViewSet.as_view()),
-    path('api/auth/', include('rest_framework.urls'))
-    # path('api/auth/', include('djoser.urls')),
-    # re_path(r'^auth/', include('djoser.urls.authtoken')),
+    path('', include('api.urls', namespace='api')),
+    # path('users/', include('users.urls', namespace='users')),
+    path('api/v1/', include(router.urls)),
+    path('api/v1/auth/', AuthorApiView.as_view()),
+    path('api/v1/drf-auth/', include('rest_framework.urls')),
+    path('api/v1/message/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]

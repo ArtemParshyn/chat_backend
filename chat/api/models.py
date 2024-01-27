@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from users.models import User
 
 
 class Message(models.Model):
@@ -8,5 +8,3 @@ class Message(models.Model):
     date = models.DateField(auto_now_add=True)
 
 
-class Author(User):
-    pass
