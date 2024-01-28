@@ -11,7 +11,7 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ('id', 'author', 'content', 'date')
 
 
-class AuthorSerializer(serializers.ModelSerializer):
+class ApiUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApiUser
         fields = ('id', 'username', 'password')

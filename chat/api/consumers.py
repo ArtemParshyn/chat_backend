@@ -28,7 +28,6 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-
         user = self.scope['user']
         print(user.is_authenticated)
         if not user.is_authenticated:
