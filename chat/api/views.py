@@ -7,9 +7,15 @@ from api.models import Message
 from api.models import ApiUser
 
 
+from rest_framework import viewsets
+from .models import Message
+from .serializers import MessageSerializer
+from .permissions import IsAuthenticatedOrReadOnly
+
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class AuthorApiView(APIView):
