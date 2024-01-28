@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.models import Message
-from users.models import User
+from api.models import ApiUser
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -14,7 +14,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 class AuthorApiView(APIView):
     def get(self, request):
-        user = User.objects.all()
+        user = ApiUser.objects.all()
         return Response({'users': AuthorSerializer(user, many=True).data})
 
     def post(self, request):

@@ -45,12 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     "api",
-    'users'
-]
+    ]
 
 
 
 ASGI_APPLICATION = 'chat.asgi.application'
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
@@ -99,7 +99,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'api.ApiUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

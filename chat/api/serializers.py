@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from api.models import Message
-from users.models import User
+from api.models import ApiUser
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -13,8 +13,8 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = ApiUser
         fields = ('id', 'username', 'password')
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        return ApiUser.objects.create_user(**validated_data)
