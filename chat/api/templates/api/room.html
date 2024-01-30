@@ -9,11 +9,13 @@
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
-<!--    {{ user_name|json_script:"user-name"}}-->
+    {{ user_name|json_script:"user-name" }}
     <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
-<!--        const userName = JSON.parse(document.getElementById('room-name').textContent);-->
 
+
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const author = JSON.parse(document.getElementById('user-name').textContent);
+        console.log("author: " + author);
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -21,10 +23,9 @@
             + roomName
             + '/'
         );
-
         chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            data = JSON.parse(e.data);
+            document.querySelector('#chat-log').value += ("author - " + data.author + "\nmessage " + data.message + '\n\n');
         };
 
         chatSocket.onclose = function(e) {
@@ -41,8 +42,9 @@
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
-            console.log(JSON.stringify({"author": "author", "message": message}));
+            console.log(JSON.stringify({"message": message, "author": author}));
             chatSocket.send(JSON.stringify({
+                'author': author,
                 'message': message
             }));
         };

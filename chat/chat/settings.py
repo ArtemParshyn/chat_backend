@@ -25,17 +25,18 @@ SECRET_KEY = 'django-insecure-%38rlsfwi8ah+qwf=&83*ur7!hm_2apws_23y_i7mc7b^#vvur
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
-
+ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
     "rest_framework",
     'rest_framework.authtoken',
     'channels',
+    'websockets',
     'daphne',
     'djoser',
+    "users",
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -99,7 +100,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'api.ApiUser'
+AUTH_USER_MODEL = 'users.ApiUser'
 
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
