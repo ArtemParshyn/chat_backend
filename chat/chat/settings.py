@@ -25,23 +25,38 @@ SECRET_KEY = 'django-insecure-%38rlsfwi8ah+qwf=&83*ur7!hm_2apws_23y_i7mc7b^#vvur
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
-
+ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    "channels",
+    "rest_framework",
+    'rest_framework.authtoken',
+    'channels',
+    'websockets',
+    'daphne',
+    'djoser',
+    "users",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rest_framework",
-    "api",
 
-]
+    "api",
+    ]
+
+
+
+ASGI_APPLICATION = 'chat.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,23 +87,23 @@ TEMPLATES = [
 ]
 
 
-ASGI_APPLICATION = "chat.asgi.application"
-
-CHANNEL_LAYERS = {
-    "default":{
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+WSGI_APPLICATION = 'chat.wsgi.application'
 
 
-# Измените DATABASES на ваш выбор, например, SQLite для простоты
+# Database
+# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
+AUTH_USER_MODEL = 'users.ApiUser'
+
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SECURE = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -130,3 +145,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
+
+}
