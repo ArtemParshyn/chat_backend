@@ -1,13 +1,22 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+import rest_framework.renderers
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import viewsets
+
+from api.models import Message
+from api.serializers import MessageSerializer
 
 
-def index(request):
-    return render(request, 'api/index.html')
+class RoomView(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    http_method_names = ["get"]
+    serializer_class = MessageSerializer
 
+    @action(detail=True, methods=['post'])
+    def post(self):
+        ...
 
-def room(request, room_name):
-    if request.user.is_authenticated:
-        return render(request, 'api/room.html', {'room_name': room_name, "user_name": request.user.username})
-    else:
-        return HttpResponse("<h1>User is not authorized</h1>")
+    @action(detail=True, methods=['delete'])
+    def delete(self):
+        ...

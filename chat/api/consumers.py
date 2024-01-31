@@ -2,7 +2,6 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.utils import timezone
-from users.models import ApiUser
 from .serializers import MessageSerializer
 from .models import Message
 

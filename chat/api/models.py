@@ -1,8 +1,11 @@
 from django.db import models
-from users.models import ApiUser
+
+
+class Room(models.Model):
+    name = models.CharField(max_length=255)
 
 
 class Message(models.Model):
-    author = models.ForeignKey(ApiUser, verbose_name='ApiUser', on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
     content = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
