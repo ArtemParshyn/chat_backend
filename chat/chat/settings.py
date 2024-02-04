@@ -159,7 +159,7 @@ REST_FRAMEWORK = {
     ],
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    # ]
+    # ] # пока убрал т.к. для login и register он не должен работать
 
 }
 
@@ -179,7 +179,7 @@ SIMPLE_JWT = {
     "JWK_URL": None,
     "LEEWAY": 0,
 
-    "AUTH_HEADER_TYPES": ("JWT",),
+    "AUTH_HEADER_TYPES": ("JWT",), # Это указываешь в postman в headers, ключ - Authorization, значение JWT access или refresh токен
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
