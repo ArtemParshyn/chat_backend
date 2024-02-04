@@ -10,12 +10,16 @@ from .models import ApiUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class ApiUserView(APIView):
+    '''
+    Тупо мониторить пользователей, в бд лень заходить
+    '''
 
     def get(self, request):
         user = ApiUser.objects.all()
@@ -24,7 +28,7 @@ class ApiUserView(APIView):
 
 @api_view(['POST']) # Использовал декоратор т.к. в классе можно определить только один метод пост для одного дейсивия(ну по крайней мере я знаю только для одного действия)
 @csrf_exempt        # Добавил просто на всякий случай
-# @permission_classes(['AllowAny']) пока не работает, хз почему
+@permission_classes([AllowAny])
 def login(request):
     '''
     request идет от rest_framework.request.Request изза чего не работает джанговский логин. Джанговский логин принимает
@@ -69,7 +73,7 @@ def login(request):
 
 @api_view(['POST'])
 @csrf_exempt
-# @permission_classes('AllowAny') Пока не работает, хз почему
+@permission_classes([AllowAny])
 def register(request):
     '''
     Все то же самое, что и в login, но просто создается новый пользователь, ну и поля username & password обязательны для
@@ -108,7 +112,7 @@ def register(request):
 
 @api_view(['POST'])
 @csrf_exempt
-# @permission_classes(['IsAuthenticated']) пока не работает, хз почему
+@permission_classes([IsAuthenticated])
 def logout(request):
     '''
     Тут просто выходим из системы и все, ну и куки еще удаляются, хотя если у нас токены то куки наверное не нужны
