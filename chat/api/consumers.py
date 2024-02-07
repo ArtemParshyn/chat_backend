@@ -3,15 +3,33 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.utils import timezone
 from users.models import ApiUser
-from .serializers import MessageSerializer
-from .models import Message
+from .serializers import MessageSerializer, GroupSerializer
+from .models import Message, Group
+
+
+
 
 
 class ChatConsumer(WebsocketConsumer):
+
+
     def connect(self):
-        self.dict = {}
+
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
+        group_objects = Group.objects
+        print(f"room_name = {self.room_name}")
+        print(f"room_group_name = {self.room_group_name}")
+
+        if not group_objects.filter(name=self.room_name).first():
+            serializer = GroupSerializer(data={
+                "name": self.room_name
+            })
+
+            if serializer.is_valid():
+                serializer.save()
+
+
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name,
@@ -36,9 +54,11 @@ class ChatConsumer(WebsocketConsumer):
 
     def chat_message(self, event):
         author = ApiUser.objects.get(username=event["author"])
+        group = Group.objects.get(name=self.room_name)
 
         # Проверяем, было ли в последние N минут сообщение с таким содержанием
         existing_message = Message.objects.filter(
+            group=group,
             author=author,
             content=event["message"],
             date__gte=timezone.now() - timezone.timedelta(seconds=0.1)
@@ -46,6 +66,7 @@ class ChatConsumer(WebsocketConsumer):
 
         if not existing_message:
             serializer = MessageSerializer(data={
+                "group": group.pk,
                 "content": event["message"],
                 "author": author.pk,
             })
