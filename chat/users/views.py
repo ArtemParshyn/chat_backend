@@ -1,33 +1,49 @@
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
+from django.contrib import auth
+
 from .serializers import ApiUserSerializer
+
 from .models import ApiUser
+from .forms import UserLoginForm, UserRegisterForm
 
 
 def register(request):
     if request.method == 'POST':
-        serializer = ApiUserSerializer(data=request.POST)
+        form = UserRegisterForm(data=request.POST)
+        if form.is_valid():
+            form.save()
 
-        if serializer.is_valid():
-            username = serializer.validated_data["username"]
-            password = serializer.validated_data["password"]
-            email = serializer.validated_data["email"]
-            print(f"username - {username}")
-            print(f"password - {password}")
-            print(f"email - {email}")
-
-            user = ApiUser.objects.create_user(
-                username=username,
-                password=password,
-                email=email
-            )
-            user.save()
-            print("Logined")
-            user = authenticate(username=username, password=password, email=email)
-            login(request, user)
-            return HttpResponse("<h1>User created, authorized</h1>")
-        else:
-            return HttpResponse("<h1>Is not valid</h1>")
+            return HttpResponse(reverse('api:index'))
     else:
-        return render(request, 'api/users/reg.html')
+        form = UserRegisterForm()
+
+    context = {'form': form}
+    return render(request, 'users/reg.html', context)
+
+
+def login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = auth.authenticate(username=username, password=password)
+            if user:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('api:index'))
+    else:
+        form = UserLoginForm()
+
+    context = {'form': form}
+    return render(request, 'users/login.html', context)
+
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('api:index'))
+
+
+
