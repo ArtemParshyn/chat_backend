@@ -3,39 +3,22 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.utils import timezone
 from users.models import ApiUser
-from .serializers import MessageSerializer, GroupSerializer
+from .serializers import MessageSerializer
 from .models import Message, Group
-
-
-
 
 
 class ChatConsumer(WebsocketConsumer):
 
-
     def connect(self):
-
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
-        group_objects = Group.objects
         print(f"room_name = {self.room_name}")
         print(f"room_group_name = {self.room_group_name}")
 
-        if not group_objects.filter(name=self.room_name).first():
-            serializer = GroupSerializer(data={
-                "name": self.room_name
-            })
-
-            if serializer.is_valid():
-                serializer.save()
-
-
         async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
+            'chat_%s' % self.room_name,
             self.channel_name,
         )
         self.accept()
-
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)

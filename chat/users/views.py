@@ -1,12 +1,7 @@
-from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import auth
-
-from .serializers import ApiUserSerializer
-
-from .models import ApiUser
 from .forms import UserLoginForm, UserRegisterForm
 
 
@@ -44,6 +39,3 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('api:index'))
-
-
-x = 5
