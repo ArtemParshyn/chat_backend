@@ -1,7 +1,9 @@
+from django.urls import reverse
+
 from api.models import Message, Group
 from api.serializers import GroupSerializer
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def index(request):
@@ -13,7 +15,7 @@ def room(request, room_name):
         serializer = GroupSerializer(data={"name": room_name})
         if serializer.is_valid():
             serializer.save()
-        return HttpResponse(status=200)
+        return redirect("/")
     else:
         if request.user.is_authenticated:
             room_object = Group.objects.get(name=room_name)

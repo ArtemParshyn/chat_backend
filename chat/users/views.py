@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import auth
 from .forms import UserLoginForm, UserRegisterForm
@@ -11,7 +11,7 @@ def register(request):
         if form.is_valid():
             form.save()
 
-            return HttpResponse(reverse('api:index'))
+            return redirect("/")
     else:
         form = UserRegisterForm()
 
