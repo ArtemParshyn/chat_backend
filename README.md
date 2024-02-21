@@ -6,7 +6,9 @@
 
 # ISTALLATION 
 --> git clone https://github.com/ArtemParshyn/chat_backend.git
+
 --> python3 -m venv venv (если еще не виртуального окружения)
+
 --> pip install -r requirements.txt
 
 # Authors
