@@ -5,15 +5,30 @@
     <title>Chat Room</title>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+
+    <div id="chat_body">
+    {% for qs in messages %}
+    
+
+        <div> author - {{qs.author}} message - {{qs.content}} </div>
+
+    
+    {% endfor %}
+    </div>
+
+
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
-<!--    {{ user_name|json_script:"user-name"}}-->
+    {{ user_name|json_script:"user-name" }}
     <script>
-
+        
+        
+        let new_div;
+        const div_chat_body = document.getElementById("chat_body");
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-<!--        const userName = JSON.parse(document.getElementById('room-name').textContent);-->
+        const author = JSON.parse(document.getElementById('user-name').textContent);
+        console.log("author: " + author);
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -21,11 +36,11 @@
             + roomName
             + '/'
         );
-
         chatSocket.onmessage = function(e) {
             data = JSON.parse(e.data);
-            console.log(data);
-            document.querySelector('#chat-log').value += ("author - " + data.author + "\nmessage " + data.message + '\n\n');
+            new_div = document.createElement('div');
+            new_div.innerHTML = "author - " + data.author + " message - " + data.message + "\n\n";
+            div_chat_body.appendChild(new_div);
         };
 
         chatSocket.onclose = function(e) {
@@ -41,10 +56,14 @@
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
+            
             const message = messageInputDom.value;
-            console.log(JSON.stringify({"message": message}));
+            messageInputDom.value = "";
+            console.log(JSON.stringify({"message": message, "author": author}));
             chatSocket.send(JSON.stringify({
-                'message': message
+                'author': author,
+                'message': message,
+                'exclude_myself': true,
             }));
         };
     </script>

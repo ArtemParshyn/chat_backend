@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign in</title>
+</head>
+<body>
+    <div class="login-page">
+        {% if form.non_field_errors %}
+        <div class="errors-handler" style="margin-top: 50px; margin-bottom: 20px; text-align: center; background-color: rgb(194, 194, 132); color: rgb(255, 255, 0); width: 360px; height: 50px; padding: inherit;">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        <div class="form">
+            <form class="login-form" action="{% url 'users:login' %}" method="post">
+                {% csrf_token %}
+                {{ form.username }}
+                {{ form.password }}
+                <button>login</button>
+                <p class="message">Not registered? <a href="{% url 'users:register' %}">Create an account</a></p>
+            </form>
+        </div>
+      </div>
+</body>
+</html>
