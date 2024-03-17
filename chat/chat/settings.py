@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'daphne',
     'djoser',
     'rest_framework_simplejwt',
+    'corsheaders',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -71,7 +72,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'chat.urls'
 
@@ -157,9 +161,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    # ] # пока убрал т.к. для login и register он не должен работать
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ] 
 
 }
 
@@ -179,7 +183,7 @@ SIMPLE_JWT = {
     "JWK_URL": None,
     "LEEWAY": 0,
 
-    "AUTH_HEADER_TYPES": ("JWT",), # Это указываешь в postman в headers, ключ - Authorization, значение JWT access или refresh токен
+    "AUTH_HEADER_TYPES": ("JWT",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",

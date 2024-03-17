@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+app_name = 'users'
 
 urlpatterns = [
     path('api/', views.ApiUserView.as_view()),

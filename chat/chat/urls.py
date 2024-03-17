@@ -25,10 +25,5 @@ router.register(r'message', MessageViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('api.urls')),
-    # path('api/v1/', include(router.urls)),
-    # path('api/v1/auth/', AuthorApiView.as_view()),
-    # path('api/v1/drf-auth/', include('rest_framework.urls')),
-    # path('api/v1/message/', include('djoser.urls')),
-    path("users/", include('users.urls')),
-    # re_path(r'^auth/', include('djoser.urls.authtoken')),
+    path("users/", include('users.urls', namespace='users')),
 ]

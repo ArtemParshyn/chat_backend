@@ -1,46 +1,26 @@
 from django.contrib.auth import authenticate, logout as django_logout
 from django.contrib.sessions.backends.db import SessionStore
-from django.shortcuts import render
-from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
 
-from .serializers import ApiUserSerializer
+from .serializers import UserSerializer
 from .models import ApiUser
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class ApiUserView(APIView):
-    '''
-    Тупо мониторить пользователей, в бд лень заходить
-    '''
-
     def get(self, request):
         user = ApiUser.objects.all()
-        return Response({'users': ApiUserSerializer(user, many=True).data})
+        return Response({'users': UserSerializer(user, many=True).data})
 
 
-@api_view(['POST']) # Использовал декоратор т.к. в классе можно определить только один метод пост для одного дейсивия(ну по крайней мере я знаю только для одного действия)
-@csrf_exempt        # Добавил просто на всякий случай
-@permission_classes([AllowAny])
+@api_view(['POST'])
 def login(request):
-    '''
-    request идет от rest_framework.request.Request изза чего не работает джанговский логин. Джанговский логин принимает
-    request.HttpRequest, а не от drf изза чего программа падает, поэтому логин сделал на сессиях, там создается отдельный
-    session, который уже логинит пользователя.
-
-    request._request чтобы не возникало проблем с определением самого этого параметра, но если често хз, сам в этом плавю еще,
-    на stack overflow порекомендовали использовать его
-
-    refresh_token создает токены для пользователя, если правильно ввел данные и они уже потом отправляются в response,
-    refresh_toke.set_cookie я сам не особо понял что это
-    '''
     username = request.data.get('username')
     password = request.data.get('password')
 
@@ -72,13 +52,7 @@ def login(request):
 
 
 @api_view(['POST'])
-@csrf_exempt
-@permission_classes([AllowAny])
 def register(request):
-    '''
-    Все то же самое, что и в login, но просто создается новый пользователь, ну и поля username & password обязательны для
-    заполнения
-    '''
     username = request.data.get('username')
     password = request.data.get('password')
     email = request.data.get('email')
@@ -111,13 +85,9 @@ def register(request):
 
 
 @api_view(['POST'])
-@csrf_exempt
 @permission_classes([IsAuthenticated])
 def logout(request):
-    '''
-    Тут просто выходим из системы и все, ну и куки еще удаляются, хотя если у нас токены то куки наверное не нужны
-    '''
-    django_logout(request) # странно, что для login параметр request от drf не работает, а для остального норм
+    django_logout(request)
     response = Response({'message': 'Logged out successfully.'})
     response.delete_cookie('sessionid')
     return response
