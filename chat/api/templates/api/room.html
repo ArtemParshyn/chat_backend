@@ -5,7 +5,7 @@
     <title>Chat Room</title>
 </head>
 <body>
-
+    {% csrf_token %}
     <div id="chat_body">
     {% for qs in messages %}
     
@@ -22,7 +22,7 @@
     {{ room_name|json_script:"room-name" }}
     {{ user_name|json_script:"user-name" }}
     <script>
-        
+
         
         let new_div;
         const div_chat_body = document.getElementById("chat_body");

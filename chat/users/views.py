@@ -28,6 +28,7 @@ def login(request):
         return Response({'error': 'Please provide both username and password.'}, status=400)
 
     user = authenticate(request._request, username=username, password=password)
+    print("user:", user)
 
     if user is None:
         return Response({'error': 'Invalid username or password.'}, status=400)
@@ -43,6 +44,8 @@ def login(request):
         'refresh_token': str(refresh_token),
         'access_token': str(refresh_token.access_token),
     }
+
+    print(f"access_token: {response_data['access_token']}")
 
     response = Response(response_data)
 
@@ -91,5 +94,3 @@ def logout(request):
     response = Response({'message': 'Logged out successfully.'})
     response.delete_cookie('sessionid')
     return response
-
-

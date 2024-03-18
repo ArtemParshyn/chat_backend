@@ -1,20 +1,32 @@
 from rest_framework import serializers
-from api.models import Message
-from users.models import User
+from .models import Message, Group
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ("name", "date_create")
+
+    def create(self, validated_data):
+        name = validated_data["name"]
+        print("creating new group")
+        return Group.objects.create(
+            name=name
+        )
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
     class Meta:
         model = Message
-        fields = ('id', 'author', 'content', 'date')
-
-
-class AuthorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'password')
+        fields = ('group', 'author', 'content', 'date')
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        group = validated_data["group"]
+        author = validated_data["author"]
+        content = validated_data["content"]
+        print("creating message")
+        return Message.objects.create(
+            group=group,
+            author=author,
+            content=content,
+        )
