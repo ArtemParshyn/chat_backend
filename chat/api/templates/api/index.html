@@ -1,17 +1,73 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
     <title>Chat Rooms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #room-name-input {
+            width: 300px;
+            padding: 10px;
+                border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        #room-name-submit {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #room-name-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .user-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #28a745;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .user-button:hover {
+            background-color: #218838;
+        }
+
+    </style>
 </head>
 <body>
-    What chat room would you like to enter?
-    <br><input id="room-name-input" type="text" size="100", placeholder="Room"><br>
+    <h1>What chat room would you like to enter?</h1>
+    <input id="room-name-input" type="text" size="100", placeholder="Room"><br>
     <input id="room-name-submit" type="button" value="Enter">
     <a href="{% url 'users:logout'%}" class="user-button">Logout</a>
     <a href="{% url 'users:login'%}" class="user-button">Login</a>
     <a href="{% url 'users:register'%}" class="user-button">Register</a>
-
 
     <script>
         document.querySelector('#room-name-input').focus();
