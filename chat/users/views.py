@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, logout as django_logout
 from django.contrib.sessions.backends.db import SessionStore
+from django.shortcuts import redirect
 
 from .serializers import UserSerializer
 from .models import ApiUser
@@ -52,6 +53,7 @@ def login(request):
     response.set_cookie('sessionid', session.session_key)
 
     return response
+
 
 
 @api_view(['POST'])
