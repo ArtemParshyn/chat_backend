@@ -7,7 +7,7 @@
 # ISTALLATION 
 --> git clone https://github.com/ArtemParshyn/chat_backend.git
 
---> pip install requirements.txt
+--> pip install -r requirements.txt
 
 # Authors
 - Артем - (сам про себя напишешь)
