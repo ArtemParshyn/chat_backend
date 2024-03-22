@@ -6,11 +6,10 @@
 
 # ISTALLATION 
 --> git clone https://github.com/ArtemParshyn/chat_backend.git
-
 --> pip install -r requirements.txt
 
-# Authors
-- Артем - (сам про себя напишешь)
+Authors
+- Артем - Прохожу курс "профессия: Python разработчик" 1 курс, ссылка на github - https://github.com/ArtemParshyn
 - Данил - Прохожу курс "профессия: DataScientist", учусь в 10 классе, ссылка на github -  https://github.com/Bounty2049
 
 # Additional information
