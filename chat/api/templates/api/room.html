@@ -1,101 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <title>Chat Room</title>
     <style>
         body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f8f9fa;
-}
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f2f2f2; /* Consistent background color */
+        }
 
-#chat_body {
-    max-height: 400px;
-    overflow-y: auto;
-}
+        #chat_body {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-.chat-message {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
+        .chat-message {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
 
-.chat-message .author {
-    font-weight: bold;
-    margin-right: 10px;
-}
+        .chat-message .author {
+            font-weight: bold;
+            margin-right: 10px;
+            color: #4CAF50; /* Green color for author */
+        }
 
-.chat-message .message-content {
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 20px;
-    padding: 10px 20px;
-    max-width: 70%;
-}
+        .chat-message .message-content {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 20px;
+            padding: 10px 20px;
+            max-width: 70%;
+        }
 
-#chat-message-input {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-top: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
+        #chat-message-input {
+            height: calc(100% - 30px);
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #fff;
+        }
 
-#chat-message-submit {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-top: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
+        #chat-message-submit {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50; /* Green color for button */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-#chat-message-submit:hover {
-    background-color: #0056b3;
-}
+        #chat-message-submit:hover {
+            background-color: #43A047; /* Darker green on hover */
+        }
     </style>
 </head>
 <body>
     <div id="chat_body">
-    {% for qs in messages %}
-    
-
-        <div> author - {{qs.author}} message - {{qs.content}} </div>
-
-    
-    {% endfor %}
+        {% for qs in messages %}
+        <div class="chat-message">
+            <span class="author">{{ qs.author }}</span>
+            <span class="message-content">{{ qs.content }}</span>
+        </div>
+        {% endfor %}
     </div>
 
-
-    <input id="chat-message-input" type="text" size="100"><br>
+    <input id="chat-message-input" type="text" size="100" placeholder="Type your message..."><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     {{ user_name|json_script:"user-name" }}
+
     <script>
-        
-        
         let new_div;
         const div_chat_body = document.getElementById("chat_body");
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
         const author = JSON.parse(document.getElementById('user-name').textContent);
-        console.log("author: " + author);
+
         const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/'
-            + roomName
-            + '/'
+            'ws://' + window.location.host + '/ws/' + roomName + '/'
         );
+
         chatSocket.onmessage = function(e) {
-            data = JSON.parse(e.data);
+            const data = JSON.parse(e.data);
             new_div = document.createElement('div');
-            new_div.innerHTML = "author - " + data.author + " message - " + data.message + "\n\n";
+            new_div.className = 'chat-message';
+            new_div.innerHTML = `<span class="author">${data.author}</span>
+                                  <span class="message-content">${data.message}</span>`;
             div_chat_body.appendChild(new_div);
         };
 
@@ -105,17 +109,15 @@
 
         document.querySelector('#chat-message-input').focus();
         document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
+            if (e.keyCode === 13) {  // Enter key
                 document.querySelector('#chat-message-submit').click();
             }
         };
 
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
-            
             const message = messageInputDom.value;
             messageInputDom.value = "";
-            console.log(JSON.stringify({"message": message, "author": author}));
             chatSocket.send(JSON.stringify({
                 'author': author,
                 'message': message,

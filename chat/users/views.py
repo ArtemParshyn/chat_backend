@@ -16,7 +16,7 @@ def register(request):
         form = UserRegisterForm()
 
     context = {'form': form}
-    return render(request, 'api/reg.html', context)
+    return render(request, 'users/reg.html', context)
 
 
 def login(request):
@@ -33,7 +33,7 @@ def login(request):
         form = UserLoginForm()
 
     context = {'form': form}
-    return render(request, 'api/auth.html', context)
+    return render(request, 'users/login.html', context)
 
 
 def logout(request):

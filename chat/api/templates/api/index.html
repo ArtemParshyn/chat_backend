@@ -1,73 +1,119 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Rooms</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f2f2f2;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            position: relative;
         }
 
         h1 {
             margin-bottom: 20px;
+            color: #343a40;
         }
 
         #room-name-input {
             width: 300px;
             padding: 10px;
-                border: 1px solid #ced4da;
+            border: 2px solid #ced4da;
             border-radius: 5px;
             font-size: 16px;
             margin-bottom: 10px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #room-name-input:focus {
+            border-color: #007bff;
         }
 
         #room-name-submit {
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
-            border: none;
+            border: 2px solid #007bff;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         #room-name-submit:hover {
-            background-color: #0056b3;
+            background-color: #fff;
+            color: #007bff;
+        }
+
+        .user-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
         }
 
         .user-button {
             display: inline-block;
             padding: 10px 20px;
-            margin: 10px;
             background-color: #28a745;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
             font-size: 16px;
+            border: 2px solid #28a745;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .user-button:hover {
-            background-color: #218838;
+            background-color: #fff;
+            color: #28a745;
         }
 
+        .home-button-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        #home-button {
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: #fff;
+            border: 2px solid #6c757d;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #home-button:hover {
+            background-color: #fff;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
+    <div class="home-button-container">
+        <button id="home-button">Home</button>
+    </div>
+    <div class="user-buttons">
+        <a href="{% url 'users:logout' %}" class="user-button">Logout</a>
+        <a href="{% url 'users:login' %}" class="user-button">Login</a>
+        <a href="{% url 'users:register' %}" class="user-button">Register</a>
+    </div>
     <h1>What chat room would you like to enter?</h1>
-    <input id="room-name-input" type="text" size="100", placeholder="Room"><br>
+    <input id="room-name-input" type="text" placeholder="Room"><br>
     <input id="room-name-submit" type="button" value="Enter">
-    <a href="{% url 'users:logout'%}" class="user-button">Logout</a>
-    <a href="{% url 'users:login'%}" class="user-button">Login</a>
-    <a href="{% url 'users:register'%}" class="user-button">Register</a>
 
     <script>
         document.querySelector('#room-name-input').focus();
@@ -79,7 +125,13 @@
 
         document.querySelector('#room-name-submit').onclick = function(e) {
             var roomName = document.querySelector('#room-name-input').value;
-            window.location.pathname = '/' + roomName + '/';
+            if (roomName.trim() !== "") {
+                window.location.pathname = '/' + roomName + '/';
+            }
+        };
+
+        document.querySelector('#home-button').onclick = function() {
+            window.location.pathname = '/';
         };
     </script>
 </body>
