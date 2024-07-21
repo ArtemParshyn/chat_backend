@@ -1,11 +1,11 @@
 services:
   web-app:
     build:
-      context: chat
+      context: .
     ports:
       - "8000:8000"
 
 
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python chat/manage.py runserver 0.0.0.0:8000"
 

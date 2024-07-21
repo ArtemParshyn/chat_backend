@@ -6,7 +6,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 RUN mkdir code
 WORKDIR code
 
-ADD chat /code/
+ADD . /code/
+RUN ls
 
 
 RUN pip install -r ./requirements.txt
