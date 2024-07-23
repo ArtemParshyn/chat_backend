@@ -1,3 +1,4 @@
+from django.db.models.functions import TruncDate
 from django.urls import reverse
 
 from api.models import Message, Group
@@ -22,13 +23,23 @@ def room(request, room_name):
             message_objects_all = Message.objects.filter(group=room_object)
             messages = [{
                 "author": message.author.username,
-                "content": message.content
+                "content": message.content,
+                "date": message.date.date,
+                "time": message.date.time,
             } for message in message_objects_all]
+
+            unique_dates = Message.objects.filter(group=room_object).annotate(date_only=TruncDate('date')).values('date_only').distinct()
+            messages_by_date = {}
+            for date in unique_dates:
+                date_only = date['date_only']
+                messages_by_date[date_only] = Message.objects.filter(date__date=date_only)
+            #unique_dates_list = unique_dates.values('date_only')
 
             return render(request, 'api/room.html', {
                 'room_name': room_name,
                 "user_name": request.user.username,
-                "messages": messages
+                'messages_by_date': messages_by_date,
+
             })
         else:
             return HttpResponse(status=403)
