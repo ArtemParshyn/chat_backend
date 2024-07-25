@@ -21,13 +21,6 @@ def room(request, room_name):
         if request.user.is_authenticated:
             room_object = Group.objects.get(name=room_name)
             message_objects_all = Message.objects.filter(group=room_object)
-            messages = [{
-                "author": message.author.username,
-                "content": message.content,
-                "date": message.date.date,
-                "time": message.date.time,
-            } for message in message_objects_all]
-
             unique_dates = Message.objects.filter(group=room_object).annotate(date_only=TruncDate('date')).values('date_only').distinct()
             messages_by_date = {}
             for date in unique_dates:
