@@ -62,7 +62,8 @@ class ChatConsumer(WebsocketConsumer):
             else:
                 print(f"Serializer errors: {serializer.errors}")
         else:
-            # Если сообщение уже существует, отправляем его всем участникам группы
+            # Если сообщение уже существует,
+            # отправляем его всем участникам группы
             self.send_chat_message(existing_message)
 
     def send_chat_message(self, message_instance):

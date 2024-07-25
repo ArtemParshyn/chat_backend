@@ -8,7 +8,11 @@ class Group(models.Model):
 
 
 class Message(models.Model):
-    group = models.ForeignKey(Group, related_name="messages", on_delete=models.CASCADE)
-    author = models.ForeignKey(ApiUser, verbose_name='ApiUser', on_delete=models.CASCADE)
+    group = models.ForeignKey(Group,
+                              related_name="messages",
+                              on_delete=models.CASCADE)
+    author = models.ForeignKey(ApiUser,
+                               verbose_name='ApiUser',
+                               on_delete=models.CASCADE)
     content = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)

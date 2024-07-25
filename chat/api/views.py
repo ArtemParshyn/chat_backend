@@ -25,7 +25,8 @@ def room(request, room_name):
             messages_by_date = {}
             for date in unique_dates:
                 date_only = date['date_only']
-                messages_by_date[date_only] = Message.objects.filter(date__date=date_only)
+                messages_by_date[date_only] = (
+                    Message.objects.filter(date__date=date_only))
 
             return render(request, 'api/room.html', {
                 'room_name': room_name,
